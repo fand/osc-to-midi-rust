@@ -1,0 +1,8 @@
+[package]
+name = "osc-to-midi-rust"
+version = "0.1.0"
+authors = ["fand <fand.gmork@gmail.com>"]
+
+[dependencies]
+midir = "~0.5"
+rosc = "~0.1"
