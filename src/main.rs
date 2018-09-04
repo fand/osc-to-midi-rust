@@ -26,7 +26,7 @@ fn main() {
             Ok((size, addr)) => {
                 println!("Received packet with size {} from {}", size, addr);
                 let packet = rosc::decoder::decode(&buf[..size]).unwrap();
-                handle_packet(packet);
+                handle_packet(&packet);
             }
             Err(e) => {
                 println!("Error receiving from socket: {}", e);
@@ -36,19 +36,31 @@ fn main() {
     }
 }
 
-fn handle_packet(packet: OscPacket) {
+fn handle_packet(packet: &OscPacket) {
     match packet {
         OscPacket::Message(msg) => {
-            println!("OSC address: {}", msg.addr);
-            match msg.args {
+            println!("Received OSC packet: {:?}", msg);
+
+            if msg.addr != "/midi" {
+                return;
+            }
+
+            match &msg.args {
                 Some(args) => {
-                    println!("OSC args: {:?}", args);
+                    handle_midi_osc(args);
                 }
                 None => println!("No args")
             }
         }
         OscPacket::Bundle(bundle) => {
-            println!("OSC Bundle: {:?}", bundle);
+            println!("Received OSC bundle: {:?}", bundle);
+            for x in &(bundle.content) {
+                handle_packet(x);
+            }
         }
     }
+}
+
+fn handle_midi_osc(args: &Vec<rosc::OscType>) {
+    println!("midi: {:?}", args);
 }
