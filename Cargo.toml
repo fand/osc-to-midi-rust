@@ -6,3 +6,11 @@ authors = ["fand <fand.gmork@gmail.com>"]
 [dependencies]
 midir = "~0.5"
 rosc = "~0.1"
+
+[[bin]]
+name = "osc-to-midi"
+path = "src/main.rs"
+
+[[bin]]
+name = "list-ports"
+path = "src/list_ports.rs"
